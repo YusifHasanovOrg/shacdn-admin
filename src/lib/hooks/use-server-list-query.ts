@@ -1,10 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { ColumnFiltersState, PaginationState } from "@tanstack/react-table";
 
-import { columnFilterValue, pageCountFromTotal, useServerTableState } from "@/lib/data-table-server";
+import {
+  columnFilterValue,
+  columnFilterValues,
+  pageCountFromTotal,
+  useServerTableState,
+} from "@/lib/data-table-server";
 
 export type ServerListResult<TItem> = {
   items: TItem[];
@@ -42,18 +47,25 @@ export function useServerListQuery<TItem, TParams>({
     [buildParams, debouncedFilters, pagination, refreshKey],
   );
 
+  const fetcherRef = useRef(fetcher);
+  const onErrorRef = useRef(onError);
+  fetcherRef.current = fetcher;
+  onErrorRef.current = onError;
+
+  const paramsKey = useMemo(() => JSON.stringify(params), [params]);
+
   useEffect(() => {
     let cancelled = false;
     void (async () => {
       setLoading(true);
       try {
-        const response = await fetcher(params);
+        const response = await fetcherRef.current(params);
         if (cancelled) return;
         setItems(response.items);
         setTotal(response.total);
       } catch (error) {
         if (cancelled) return;
-        onError?.(error);
+        onErrorRef.current?.(error);
         setItems([]);
         setTotal(0);
       } finally {
@@ -63,7 +75,7 @@ export function useServerListQuery<TItem, TParams>({
     return () => {
       cancelled = true;
     };
-  }, [fetcher, onError, params]);
+  }, [paramsKey]);
 
   const refetch = useCallback(() => {
     setRefreshKey((key) => key + 1);
@@ -82,4 +94,4 @@ export function useServerListQuery<TItem, TParams>({
   };
 }
 
-export { columnFilterValue, pageCountFromTotal };
+export { columnFilterValue, columnFilterValues, pageCountFromTotal };

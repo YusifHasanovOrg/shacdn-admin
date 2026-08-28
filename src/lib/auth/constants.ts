@@ -10,6 +10,8 @@ export const PERMISSIONS = {
   usersRead: "users:read",
   usersWrite: "users:write",
   rolesRead: "roles:read",
+  rolesWrite: "roles:write",
+  auditRead: "audit:read",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];

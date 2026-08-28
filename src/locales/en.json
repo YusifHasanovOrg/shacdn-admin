@@ -1,0 +1,197 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "clear": "Clear",
+    "all": "All",
+    "results": "{{count}} results"
+  },
+  "locale": {
+    "label": "Language",
+    "en": "English",
+    "az": "Azərbaycan"
+  },
+  "nav": {
+    "example": "Example",
+    "products": "Products",
+    "audit": "Audit"
+  },
+  "example": {
+    "products": {
+      "title": "Products",
+      "description": "Manage catalog items, pricing, and availability",
+      "add": "Add product",
+      "back": "Products",
+      "emptyTitle": "No products yet",
+      "emptyDescriptionWrite": "Create your first product to get started.",
+      "emptyDescriptionRead": "No products match your filters.",
+      "deleteTitle": "Delete product?",
+      "deleteDescription": "\"{{name}}\" will be soft-deleted and removed from the list.",
+      "deleted": "Deleted {{name}}",
+      "loadError": "Failed to load products",
+      "deleteError": "Failed to delete product",
+      "new": {
+        "title": "New product",
+        "description": "Add a product to the example catalog",
+        "cardTitle": "Product details",
+        "cardDescription": "Fill in the basic product information",
+        "created": "Product created",
+        "createError": "Failed to create product"
+      },
+      "edit": {
+        "viewDescription": "View product",
+        "editDescription": "Edit product",
+        "cardTitle": "Product details",
+        "cardDescriptionReadOnly": "Read-only view (products:write required to edit)",
+        "cardDescriptionWrite": "Update the product information",
+        "updated": "Product updated",
+        "updateError": "Failed to update product",
+        "deleted": "Product deleted",
+        "deleteError": "Failed to delete product",
+        "loadError": "Failed to load product",
+        "deleteTitle": "Delete product?",
+        "deleteDescription": "\"{{name}}\" will be soft-deleted."
+      },
+      "columns": {
+        "name": "Name",
+        "searchName": "Search name...",
+        "sku": "SKU",
+        "searchSku": "Search SKU...",
+        "category": "Category",
+        "allCategories": "All categories",
+        "status": "Status",
+        "price": "Price",
+        "created": "Created",
+        "openActions": "Open actions for {{name}}"
+      },
+      "form": {
+        "name": "Name",
+        "namePlaceholder": "Product name",
+        "sku": "SKU",
+        "skuPlaceholder": "SKU-1001",
+        "skuHint": "Unique catalog code. Use letters, numbers, and dashes.",
+        "category": "Category",
+        "selectCategory": "Select category",
+        "status": "Status",
+        "selectStatus": "Select status",
+        "price": "Price",
+        "pricePlaceholder": "0.00",
+        "description": "Description",
+        "descriptionPlaceholder": "Optional product description",
+        "detailsTitle": "Product details",
+        "detailsDescription": "Name, SKU, category, status, and price",
+        "descriptionTitle": "Description",
+        "descriptionCardDescription": "Optional notes shown with the product"
+      }
+    }
+  },
+  "product": {
+    "category": {
+      "ELECTRONICS": "Electronics",
+      "CLOTHING": "Clothing",
+      "FOOD": "Food",
+      "HOME": "Home"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "DRAFT": "Draft",
+      "ARCHIVED": "Archived"
+    }
+  },
+  "roles": {
+    "title": "Roles & Permissions",
+    "description": "Create custom roles and assign permissions",
+    "descriptionRead": "View access roles and assigned permissions",
+    "add": "Create role",
+    "back": "Roles",
+    "system": "System",
+    "loading": "Loading roles and permissions…",
+    "empty": "No roles configured",
+    "emptyDescriptionWrite": "Create a custom role to get started.",
+    "emptyDescriptionRead": "No roles are available yet.",
+    "loadError": "Failed to load roles",
+    "deleted": "Deleted {{name}}",
+    "deleteError": "Failed to delete role",
+    "deleteTitle": "Delete role?",
+    "deleteDescription": "\"{{name}}\" will be permanently deleted. Users must be reassigned first.",
+    "columns": {
+      "name": "Name",
+      "code": "Code",
+      "permissions": "Permissions",
+      "morePermissions": "+{{count}} more",
+      "openActions": "Open actions for {{name}}"
+    },
+    "form": {
+      "detailsTitle": "Role details",
+      "detailsDescription": "Identify the role with a stable code and a display name",
+      "code": "Code",
+      "codePlaceholder": "support_agent",
+      "codeHint": "Lowercase letters, numbers, and underscores only. This cannot be changed later.",
+      "codeLocked": "The role code is permanent and cannot be changed.",
+      "name": "Name",
+      "namePlaceholder": "Support Agent",
+      "permissionsTitle": "Permissions",
+      "permissionsSelected": "{{selected}} of {{total}} selected",
+      "permissionsEmpty": "No permissions are available.",
+      "permissionsLoadError": "Failed to load permissions",
+      "selectAll": "Select all",
+      "clear": "Clear",
+      "groupCount": "{{selected}} of {{total}}"
+    },
+    "groups": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "users": "Users",
+      "roles": "Roles",
+      "audit": "Audit"
+    },
+    "new": {
+      "title": "New role",
+      "description": "Create a custom role and assign permissions",
+      "created": "Role created",
+      "createError": "Failed to create role"
+    },
+    "edit": {
+      "viewDescription": "View role",
+      "editDescription": "Edit role",
+      "updated": "Role updated",
+      "updateError": "Failed to update role",
+      "deleted": "Role deleted",
+      "deleteError": "Failed to delete role",
+      "loadError": "Failed to load role",
+      "deleteTitle": "Delete role?",
+      "deleteDescription": "\"{{name}}\" will be permanently deleted. Users must be reassigned first."
+    }
+  },
+  "audit": {
+    "title": "Audit log",
+    "description": "Review who created, updated, or deleted records",
+    "empty": "No audit events yet",
+    "emptyDescription": "Changes to products and users will appear here.",
+    "loadError": "Failed to load audit logs",
+    "system": "System",
+    "columns": {
+      "time": "Time",
+      "actor": "Actor",
+      "searchActor": "Search actor...",
+      "action": "Action",
+      "resource": "Resource",
+      "details": "Details"
+    },
+    "actions": {
+      "create": "Created",
+      "update": "Updated",
+      "delete": "Deleted"
+    },
+    "resources": {
+      "product": "Product",
+      "user": "User",
+      "role": "Role"
+    }
+  }
+}

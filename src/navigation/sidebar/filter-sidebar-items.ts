@@ -52,8 +52,17 @@ export function userHasRouteAccess(user: AuthUser | null, pathname: string, writ
   if (pathname.startsWith("/dashboard/users")) {
     return write ? hasPermission(user, "users:write") : hasPermission(user, "users:read");
   }
+  if (pathname.startsWith("/dashboard/roles/new")) {
+    return hasPermission(user, "roles:write");
+  }
+  if (/^\/dashboard\/roles\/[^/]+\/edit$/.test(pathname)) {
+    return write ? hasPermission(user, "roles:write") : hasPermission(user, "roles:read");
+  }
   if (pathname.startsWith("/dashboard/roles")) {
     return hasPermission(user, "roles:read");
+  }
+  if (pathname.startsWith("/dashboard/audit")) {
+    return hasPermission(user, "audit:read");
   }
   if (pathname.startsWith("/dashboard")) {
     return hasPermission(user, "dashboard:read");

@@ -1,3 +1,4 @@
+import { getStoredLocale } from "@/lib/i18n";
 import { ApiError, type ApiErrorResponse, type ApiSuccessResponse, getApiBaseUrl } from "@/lib/api/types";
 import { clearTokens, getAccessToken, getRefreshToken, setTokens } from "@/lib/auth/tokens";
 
@@ -59,6 +60,10 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     }
     requestHeaders.set("Authorization", `Bearer ${token}`);
   }
+
+  const locale = getStoredLocale();
+  requestHeaders.set("X-Locale", locale);
+  requestHeaders.set("Accept-Language", locale);
 
   const response = await fetch(`${getApiBaseUrl()}${path}`, {
     ...rest,

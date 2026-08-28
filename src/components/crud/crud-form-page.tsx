@@ -11,6 +11,7 @@ type CrudFormPageProps = {
   actions?: React.ReactNode;
   cardTitle?: React.ReactNode;
   cardDescription?: React.ReactNode;
+  wrapInCard?: boolean;
   children: React.ReactNode;
   className?: string;
 };
@@ -24,6 +25,7 @@ export function CrudFormPage({
   actions,
   cardTitle = "Details",
   cardDescription,
+  wrapInCard = true,
   children,
   className,
 }: CrudFormPageProps) {
@@ -37,13 +39,17 @@ export function CrudFormPage({
         description={description}
         actions={actions}
       />
-      <Card className="shadow-xs">
-        <CardHeader className="border-b">
-          <CardTitle>{cardTitle}</CardTitle>
-          {cardDescription ? <CardDescription>{cardDescription}</CardDescription> : null}
-        </CardHeader>
-        <CardContent className="pt-6">{children}</CardContent>
-      </Card>
+      {wrapInCard ? (
+        <Card className="shadow-xs">
+          <CardHeader className="border-b">
+            <CardTitle>{cardTitle}</CardTitle>
+            {cardDescription ? <CardDescription>{cardDescription}</CardDescription> : null}
+          </CardHeader>
+          <CardContent className="pt-6">{children}</CardContent>
+        </Card>
+      ) : (
+        children
+      )}
     </div>
   );
 }

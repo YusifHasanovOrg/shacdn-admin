@@ -86,7 +86,11 @@ export function DataTable<TData extends RowData>({
   return (
     <div className="flex flex-col gap-4">
       <div className="overflow-hidden rounded-xl border bg-card shadow-xs">
-        <Table className="table-fixed" aria-busy={loading ? true : undefined}>
+        <Table
+          className="table-fixed"
+          style={{ minWidth: leafColumns.reduce((sum, column) => sum + column.getSize(), 0) }}
+          aria-busy={loading ? true : undefined}
+        >
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="bg-muted/40 hover:bg-muted/40">

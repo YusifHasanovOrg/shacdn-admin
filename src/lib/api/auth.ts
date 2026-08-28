@@ -43,11 +43,23 @@ export type RoleResponse = {
   code: string;
   name: string;
   permissions: string[];
+  system?: boolean;
 };
 
 export type PermissionResponse = {
   code: string;
   description: string;
+};
+
+export type RoleCreateBody = {
+  code: string;
+  name: string;
+  permissions: string[];
+};
+
+export type RoleUpdateBody = {
+  name: string;
+  permissions: string[];
 };
 
 export const rbacApi = {
@@ -57,5 +69,25 @@ export const rbacApi = {
 
   listPermissions() {
     return apiRequest<PermissionResponse[]>("/api/v1/rbac/permissions");
+  },
+
+  createRole(body: RoleCreateBody) {
+    return apiRequest<RoleResponse>("/api/v1/rbac/roles", {
+      method: "POST",
+      body,
+    });
+  },
+
+  updateRole(code: string, body: RoleUpdateBody) {
+    return apiRequest<RoleResponse>(`/api/v1/rbac/roles/${encodeURIComponent(code)}`, {
+      method: "PUT",
+      body,
+    });
+  },
+
+  deleteRole(code: string) {
+    return apiRequest<void>(`/api/v1/rbac/roles/${encodeURIComponent(code)}`, {
+      method: "DELETE",
+    });
   },
 };

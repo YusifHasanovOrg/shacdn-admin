@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import { useTable } from "@tanstack/react-table";
 import { endOfDay, startOfDay } from "date-fns";
-import { Plus } from "lucide-react";
+import { Package, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { createProductsColumns } from "@/app/(main)/dashboard/example/products/_components/products-columns";
@@ -20,7 +20,8 @@ import { formatApiError } from "@/lib/api/client";
 import { productsApi } from "@/lib/api/products";
 import { PERMISSIONS } from "@/lib/auth/constants";
 import { dataTableFeatures } from "@/lib/data-table-features";
-import { columnFilterValue, useServerListQuery } from "@/lib/hooks/use-server-list-query";
+import { useProductLabels } from "@/lib/i18n/product-labels";
+import { columnFilterValue, columnFilterValues, useServerListQuery } from "@/lib/hooks/use-server-list-query";
 
 function parseDateRangeFilter(value: string | undefined) {
   if (!value) return {};
@@ -36,6 +37,7 @@ function parseDateRangeFilter(value: string | undefined) {
 }
 
 export default function ProductsPage() {
+  const { t, locale, categoryOptions, statusOptions, categoryLabel, statusLabel } = useProductLabels();
   const canWrite = usePermission(PERMISSIONS.productsWrite);
   const handleApiError = useApiErrorHandler();
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
@@ -44,13 +46,13 @@ export default function ProductsPage() {
   const buildParams = useCallback(
     ({ debouncedFilters, pagination, refreshKey }: { debouncedFilters: Parameters<typeof columnFilterValue>[0]; pagination: { pageIndex: number; pageSize: number }; refreshKey: number }) => {
       void refreshKey;
-      const category = columnFilterValue(debouncedFilters, "category");
+      const category = columnFilterValues(debouncedFilters, "category");
       const status = columnFilterValue(debouncedFilters, "status");
 
       return {
         name: columnFilterValue(debouncedFilters, "name"),
         sku: columnFilterValue(debouncedFilters, "sku"),
-        category: category as Product["category"] | undefined,
+        category: category as Product["category"][] | undefined,
         status: status as Product["status"] | undefined,
         ...parseDateRangeFilter(columnFilterValue(debouncedFilters, "created_at")),
         limit: pagination.pageSize,
@@ -71,9 +73,9 @@ export default function ProductsPage() {
   const onError = useCallback(
     (error: unknown) => {
       handleApiError(error);
-      toast.error(formatApiError(error, "Failed to load products"));
+      toast.error(formatApiError(error, t("example.products.loadError")));
     },
-    [handleApiError],
+    [handleApiError, t],
   );
 
   const { items, total, loading, refetch, columnFilters, setColumnFilters, pagination, setPagination, pageCount } =
@@ -89,24 +91,30 @@ export default function ProductsPage() {
     setDeleting(true);
     try {
       await productsApi.delete(deleteTarget.id);
-      toast.success(`Deleted ${deleteTarget.name}`);
+      toast.success(t("example.products.deleted", { name: deleteTarget.name }));
       setDeleteTarget(null);
       refetch();
     } catch (error) {
       handleApiError(error);
-      toast.error(formatApiError(error, "Failed to delete product"));
+      toast.error(formatApiError(error, t("example.products.deleteError")));
     } finally {
       setDeleting(false);
     }
-  }, [deleteTarget, handleApiError, refetch]);
+  }, [deleteTarget, handleApiError, refetch, t]);
 
   const columns = useMemo(
     () =>
       createProductsColumns({
         canWrite,
         onDelete: (product) => setDeleteTarget(product),
+        t,
+        locale,
+        categoryOptions,
+        statusOptions,
+        categoryLabel,
+        statusLabel,
       }),
-    [canWrite],
+    [canWrite, categoryLabel, categoryOptions, locale, statusLabel, statusOptions, t],
   );
 
   const table = useTable({
@@ -128,11 +136,12 @@ export default function ProductsPage() {
   return (
     <>
       <CrudListPage
-        title="Products"
+        icon={Package}
+        title={t("example.products.title")}
         description={
           <>
-            Example CRUD with server-side pagination and column filters
-            {total > 0 ? ` · ${total.toLocaleString()} results` : ""}
+            {t("example.products.description")}
+            {total > 0 ? ` · ${t("common.results", { count: total.toLocaleString() })}` : ""}
           </>
         }
         actions={
@@ -140,7 +149,7 @@ export default function ProductsPage() {
             <Button asChild>
               <Link href="/dashboard/example/products/new">
                 <Plus data-icon="inline-start" />
-                Add product
+                {t("example.products.add")}
               </Link>
             </Button>
           </Can>
@@ -154,13 +163,12 @@ export default function ProductsPage() {
         onOpenChange={(open) => {
           if (!open) setDeleteTarget(null);
         }}
-        title="Delete product?"
+        title={t("example.products.deleteTitle")}
         description={
-          deleteTarget
-            ? `"${deleteTarget.name}" will be soft-deleted and removed from the list.`
-            : undefined
+          deleteTarget ? t("example.products.deleteDescription", { name: deleteTarget.name }) : undefined
         }
-        confirmLabel="Delete"
+        confirmLabel={t("common.delete")}
+        cancelLabel={t("common.cancel")}
         destructive
         loading={deleting}
         onConfirm={handleDelete}

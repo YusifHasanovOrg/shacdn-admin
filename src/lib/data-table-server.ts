@@ -9,6 +9,17 @@ export function columnFilterValue(filters: ColumnFiltersState, id: string) {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
 }
 
+export function columnFilterValues(filters: ColumnFiltersState, id: string) {
+  const value = filters.find((filter) => filter.id === id)?.value;
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+  }
+  if (typeof value === "string" && value.trim()) {
+    return [value.trim()];
+  }
+  return undefined;
+}
+
 export function useServerTableState(initialPageSize = 20) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [debouncedFilters, setDebouncedFilters] = useState<ColumnFiltersState>([]);

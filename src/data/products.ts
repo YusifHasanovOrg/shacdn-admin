@@ -1,6 +1,8 @@
-export type ProductCategory = "ELECTRONICS" | "CLOTHING" | "FOOD" | "HOME";
+export const PRODUCT_CATEGORIES = ["ELECTRONICS", "CLOTHING", "FOOD", "HOME"] as const;
+export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];
 
-export type ProductStatus = "ACTIVE" | "DRAFT" | "ARCHIVED";
+export const PRODUCT_STATUSES = ["ACTIVE", "DRAFT", "ARCHIVED"] as const;
+export type ProductStatus = (typeof PRODUCT_STATUSES)[number];
 
 export type Product = {
   id: string;
@@ -14,18 +16,14 @@ export type Product = {
   updated_at?: string;
 };
 
-export const productCategoryOptions: { label: string; value: ProductCategory }[] = [
-  { label: "Electronics", value: "ELECTRONICS" },
-  { label: "Clothing", value: "CLOTHING" },
-  { label: "Food", value: "FOOD" },
-  { label: "Home", value: "HOME" },
-];
+export const productCategoryOptions: { label: string; value: ProductCategory }[] = PRODUCT_CATEGORIES.map(
+  (value) => ({ label: value, value }),
+);
 
-export const productStatusOptions: { label: string; value: ProductStatus }[] = [
-  { label: "Active", value: "ACTIVE" },
-  { label: "Draft", value: "DRAFT" },
-  { label: "Archived", value: "ARCHIVED" },
-];
+export const productStatusOptions: { label: string; value: ProductStatus }[] = PRODUCT_STATUSES.map((value) => ({
+  label: value,
+  value,
+}));
 
 export function productCategoryLabel(category: ProductCategory) {
   return productCategoryOptions.find((option) => option.value === category)?.label ?? category;

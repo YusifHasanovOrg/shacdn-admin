@@ -12,17 +12,25 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 interface DateRangePickerProps {
   value?: DateRange;
   onChange?: (value: DateRange | undefined) => void;
+  placeholder?: string;
+  size?: "default" | "sm";
 }
 
-export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
+export function DateRangePicker({
+  value,
+  onChange,
+  placeholder = "Select date",
+  size = "default",
+}: DateRangePickerProps) {
   const [open, setOpen] = React.useState(false);
   const [internalDateRange, setInternalDateRange] = React.useState<DateRange | undefined>(() => {
+    if (onChange) return undefined;
     const to = new Date();
     const from = subDays(to, 29);
     return { from, to };
   });
-  const dateRange = value ?? internalDateRange;
-  let dateRangeLabel = "Select date";
+  const dateRange = onChange ? value : (value ?? internalDateRange);
+  let dateRangeLabel = placeholder;
 
   if (dateRange?.from) {
     dateRangeLabel = format(dateRange.from, "d MMM yyyy");
@@ -33,7 +41,7 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
   }
 
   const handleDateChange = (nextValue: DateRange | undefined) => {
-    if (!value) {
+    if (!onChange) {
       setInternalDateRange(nextValue);
     }
     onChange?.(nextValue);
@@ -42,11 +50,21 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" id="date" className="font-normal">
-          {dateRangeLabel}
+        <Button
+          variant="outline"
+          size={size === "sm" ? "sm" : "default"}
+          id="date"
+          className={
+            size === "sm"
+              ? "h-7 w-full min-w-0 justify-start px-2 font-normal text-xs"
+              : "font-normal"
+          }
+          onClick={(event) => event.stopPropagation()}
+        >
+          <span className="truncate">{dateRangeLabel}</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto overflow-hidden p-0" align="end">
+      <PopoverContent className="w-auto overflow-hidden p-0" align="start">
         <Calendar
           mode="range"
           defaultMonth={dateRange?.from}

@@ -6,6 +6,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Package } from "lucide-react";
 
 import { DataTableColumnHeader } from "@/components/data-table";
+import type { ColumnHeaderFilterOption } from "@/components/data-table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,13 +16,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  type Product,
-  productCategoryLabel,
-  productCategoryOptions,
-  productStatusLabel,
-  productStatusOptions,
-} from "@/data/products";
+import type { Product } from "@/data/products";
+import type { TranslateFn } from "@/lib/i18n";
+import { localeToIntl, type Locale } from "@/lib/i18n";
 import type { DataTableFeatures } from "@/lib/data-table-features";
 import { cn } from "@/lib/utils";
 
@@ -34,17 +31,35 @@ function statusVariant(status: Product["status"]) {
 type CreateProductsColumnsOptions = {
   canWrite?: boolean;
   onDelete: (product: Product) => void;
+  t: TranslateFn;
+  locale: Locale;
+  categoryOptions: ColumnHeaderFilterOption[];
+  statusOptions: ColumnHeaderFilterOption[];
+  categoryLabel: (category: Product["category"]) => string;
+  statusLabel: (status: Product["status"]) => string;
 };
 
 export function createProductsColumns({
   canWrite = false,
   onDelete,
+  t,
+  locale,
+  categoryOptions,
+  statusOptions,
+  categoryLabel,
+  statusLabel,
 }: CreateProductsColumnsOptions): ColumnDef<DataTableFeatures, Product>[] {
+  const intlLocale = localeToIntl(locale);
+
   const columns: ColumnDef<DataTableFeatures, Product>[] = [
     {
       accessorKey: "name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Name" filter={{ kind: "text", placeholder: "Search name..." }} />
+        <DataTableColumnHeader
+          column={column}
+          title={t("example.products.columns.name")}
+          filter={{ kind: "text", placeholder: t("example.products.columns.searchName") }}
+        />
       ),
       cell: ({ row }) => (
         <Link
@@ -64,7 +79,11 @@ export function createProductsColumns({
       id: "sku",
       accessorFn: (row) => row.sku,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="SKU" filter={{ kind: "text", placeholder: "Search SKU..." }} />
+        <DataTableColumnHeader
+          column={column}
+          title={t("example.products.columns.sku")}
+          filter={{ kind: "text", placeholder: t("example.products.columns.searchSku") }}
+        />
       ),
       cell: ({ row }) => <span className="font-mono text-muted-foreground text-xs">{row.original.sku}</span>,
       filterFn: "includesString",
@@ -75,14 +94,15 @@ export function createProductsColumns({
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Category"
+          title={t("example.products.columns.category")}
           filter={{
-            kind: "select",
-            options: productCategoryOptions,
+            kind: "multiselect",
+            options: categoryOptions,
+            placeholder: t("example.products.columns.allCategories"),
           }}
         />
       ),
-      cell: ({ row }) => <Badge variant="outline">{productCategoryLabel(row.original.category)}</Badge>,
+      cell: ({ row }) => <Badge variant="outline">{categoryLabel(row.original.category)}</Badge>,
       filterFn: "equalsString",
       size: 130,
     },
@@ -91,10 +111,11 @@ export function createProductsColumns({
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Status"
+          title={t("example.products.columns.status")}
           filter={{
             kind: "select",
-            options: productStatusOptions,
+            options: statusOptions,
+            allLabel: t("common.all"),
           }}
         />
       ),
@@ -103,7 +124,7 @@ export function createProductsColumns({
           variant={statusVariant(row.original.status)}
           className={cn(row.original.status === "ARCHIVED" && "text-muted-foreground")}
         >
-          {productStatusLabel(row.original.status)}
+          {statusLabel(row.original.status)}
         </Badge>
       ),
       filterFn: "equalsString",
@@ -111,10 +132,10 @@ export function createProductsColumns({
     },
     {
       accessorKey: "price",
-      header: () => <span className="font-medium text-sm">Price</span>,
+      header: () => <span className="font-medium text-sm">{t("example.products.columns.price")}</span>,
       cell: ({ row }) => (
         <span className="tabular-nums">
-          {row.original.price.toLocaleString("en-US", { style: "currency", currency: "USD" })}
+          {row.original.price.toLocaleString(intlLocale, { style: "currency", currency: "USD" })}
         </span>
       ),
       size: 100,
@@ -122,10 +143,12 @@ export function createProductsColumns({
     {
       id: "created_at",
       accessorFn: (row) => row.created_at,
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Created" filter={{ kind: "date_range" }} />,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={t("example.products.columns.created")} filter={{ kind: "date_range" }} />
+      ),
       cell: ({ row }) => (
         <span className="text-muted-foreground text-sm">
-          {new Date(row.original.created_at).toLocaleDateString("en-US", {
+          {new Date(row.original.created_at).toLocaleDateString(intlLocale, {
             year: "numeric",
             month: "short",
             day: "numeric",
@@ -139,13 +162,13 @@ export function createProductsColumns({
   if (canWrite) {
     columns.push({
       id: "actions",
-      header: () => <div className="text-right font-medium text-sm">Actions</div>,
+      header: () => <div className="text-right font-medium text-sm">{t("common.actions")}</div>,
       cell: ({ row }) => (
         <div className="text-right">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                aria-label={`Open actions for ${row.original.name}`}
+                aria-label={t("example.products.columns.openActions", { name: row.original.name })}
                 className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
                 size="icon-sm"
                 variant="ghost"
@@ -155,11 +178,11 @@ export function createProductsColumns({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/example/products/${row.original.id}/edit`}>Edit</Link>
+                <Link href={`/dashboard/example/products/${row.original.id}/edit`}>{t("common.edit")}</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive" onClick={() => onDelete(row.original)}>
-                Delete
+                {t("common.delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

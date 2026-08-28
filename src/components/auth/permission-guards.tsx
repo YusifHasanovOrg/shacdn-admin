@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -68,7 +68,7 @@ export function usePermission(permission: string) {
 export function useApiErrorHandler() {
   const router = useRouter();
 
-  return (error: unknown) => {
+  return useCallback((error: unknown) => {
     if (error instanceof ApiError) {
       if (error.status === 401) {
         router.replace("/auth/v2/login");
@@ -78,5 +78,5 @@ export function useApiErrorHandler() {
         router.replace("/unauthorized");
       }
     }
-  };
+  }, [router]);
 }

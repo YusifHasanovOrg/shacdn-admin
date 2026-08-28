@@ -15,11 +15,13 @@ import { formatApiError } from "@/lib/api/client";
 import { productsApi } from "@/lib/api/products";
 import { PERMISSIONS } from "@/lib/auth/constants";
 import { emptyProductForm, productFormToBody } from "@/lib/product-form";
+import { useTranslation } from "@/stores/locale/locale-provider";
 
 const FORM_ID = "create-product-form";
 
 function NewProductContent() {
   const router = useRouter();
+  const { t } = useTranslation();
   const handleApiError = useApiErrorHandler();
   const [saving, setSaving] = useState(false);
 
@@ -27,11 +29,11 @@ function NewProductContent() {
     setSaving(true);
     try {
       const product = await productsApi.create(productFormToBody(values));
-      toast.success("Product created");
+      toast.success(t("example.products.new.created"));
       router.push(`/dashboard/example/products/${product.id}/edit`);
     } catch (error) {
       handleApiError(error);
-      toast.error(formatApiError(error, "Failed to create product"));
+      toast.error(formatApiError(error, t("example.products.new.createError")));
     } finally {
       setSaving(false);
     }
@@ -40,16 +42,15 @@ function NewProductContent() {
   return (
     <CrudFormPage
       backHref="/dashboard/example/products"
-      backLabel="Products"
+      backLabel={t("example.products.back")}
       icon={PackagePlus}
-      title="New product"
-      description="Add a product to the example catalog"
-      cardTitle="Product details"
-      cardDescription="Fill in the basic product information"
+      title={t("example.products.new.title")}
+      description={t("example.products.new.description")}
+      wrapInCard={false}
       actions={
         <Button type="submit" form={FORM_ID} disabled={saving}>
           {saving ? <Loader2 data-icon="inline-start" className="animate-spin" /> : <Save data-icon="inline-start" />}
-          Save
+          {t("common.save")}
         </Button>
       }
     >

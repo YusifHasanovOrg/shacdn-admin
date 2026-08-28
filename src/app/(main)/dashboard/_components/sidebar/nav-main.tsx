@@ -28,6 +28,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/stores/locale/locale-provider";
 import type {
   NavBadge,
   NavGroup,
@@ -82,6 +83,11 @@ function hasSubItems(item: NavMainItem): item is NavMainParentItem {
   return Boolean(item.subItems?.length);
 }
 
+function useNavLabel(item: { title: string; titleKey?: string }) {
+  const { t } = useTranslation();
+  return item.titleKey ? t(item.titleKey) : item.title;
+}
+
 export function NavMain({ items }: NavMainProps) {
   const path = usePathname();
 
@@ -128,9 +134,9 @@ export function NavMain({ items }: NavMainProps) {
       </SidebarGroup>
       {items.map((group) => (
         <SidebarGroup key={group.id}>
-          {group.label && (
+          {(group.labelKey || group.label) && (
             <SidebarGroupLabel className="group-data-[collapsible=icon]:pointer-events-none">
-              {group.label}
+              <NavGroupLabel group={group} />
             </SidebarGroupLabel>
           )}
           <SidebarGroupContent>
@@ -174,18 +180,79 @@ function NavItem({ item, isItemActive, isSubItemActive, isSubmenuOpen }: NavItem
   );
 }
 
+function NavGroupLabel({ group }: { group: NavGroup }) {
+  const { t } = useTranslation();
+  return group.labelKey ? t(group.labelKey) : group.label;
+}
+
+function NavSubMenuLink({
+  subItem,
+  isSubItemActive,
+}: {
+  subItem: NavMainParentItem["subItems"][number];
+  isSubItemActive: (url: string) => boolean;
+}) {
+  const SubIcon = subItem.icon;
+  const subLabel = useNavLabel(subItem);
+
+  return (
+    <SidebarMenuSubItem>
+      <SidebarMenuSubButton asChild aria-disabled={subItem.disabled} isActive={isSubItemActive(subItem.url)}>
+        <Link
+          prefetch={false}
+          href={subItem.url}
+          target={subItem.newTab ? "_blank" : undefined}
+          rel={subItem.newTab ? "noreferrer" : undefined}
+        >
+          {SubIcon && <SubIcon />}
+          <span>{subLabel}</span>
+        </Link>
+      </SidebarMenuSubButton>
+    </SidebarMenuSubItem>
+  );
+}
+
+function NavSubDropdownLink({
+  subItem,
+  isSubItemActive,
+}: {
+  subItem: NavMainParentItem["subItems"][number];
+  isSubItemActive: (url: string) => boolean;
+}) {
+  const SubIcon = subItem.icon;
+  const subLabel = useNavLabel(subItem);
+
+  return (
+    <DropdownMenuItem key={subItem.id} asChild disabled={subItem.disabled}>
+      <Link
+        prefetch={false}
+        href={subItem.url}
+        target={subItem.newTab ? "_blank" : undefined}
+        rel={subItem.newTab ? "noreferrer" : undefined}
+        aria-current={isSubItemActive(subItem.url) ? "page" : undefined}
+        className="flex items-center gap-2"
+      >
+        {SubIcon && <SubIcon />}
+        <span>{subLabel}</span>
+      </Link>
+    </DropdownMenuItem>
+  );
+}
+
 function NavLinkItem({ item, isActive, showIconFallback }: NavLinkItemProps) {
+  const label = useNavLabel(item);
+
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild aria-disabled={item.disabled} tooltip={item.title} isActive={isActive}>
+      <SidebarMenuButton asChild aria-disabled={item.disabled} tooltip={label} isActive={isActive}>
         <Link
           prefetch={false}
           href={item.url}
           target={item.newTab ? "_blank" : undefined}
           rel={item.newTab ? "noreferrer" : undefined}
         >
-          <NavLinkIcon item={item} showFallback={showIconFallback} />
-          <span>{item.title}</span>
+          <NavLinkIcon item={item} showFallback={showIconFallback} label={label} />
+          <span>{label}</span>
         </Link>
       </SidebarMenuButton>
       <NavItemBadge badge={item.badge} />
@@ -193,7 +260,7 @@ function NavLinkItem({ item, isActive, showIconFallback }: NavLinkItemProps) {
   );
 }
 
-function NavLinkIcon({ item, showFallback }: NavLinkIconProps) {
+function NavLinkIcon({ item, showFallback, label }: NavLinkIconProps & { label: string }) {
   const Icon = item.icon;
 
   if (Icon) {
@@ -201,7 +268,7 @@ function NavLinkIcon({ item, showFallback }: NavLinkIconProps) {
   }
 
   if (showFallback) {
-    return <CollapsedIconFallback title={item.title} />;
+    return <CollapsedIconFallback title={label} />;
   }
 
   return null;
@@ -209,38 +276,23 @@ function NavLinkIcon({ item, showFallback }: NavLinkIconProps) {
 
 function NavDropdownItem({ item, isActive, isSubItemActive }: NavDropdownItemProps) {
   const Icon = item.icon;
+  const label = useNavLabel(item);
 
   return (
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton tooltip={item.title} isActive={isActive} disabled={item.disabled}>
-            {Icon ? <Icon /> : <CollapsedIconFallback title={item.title} />}
-            <span>{item.title}</span>
+          <SidebarMenuButton tooltip={label} isActive={isActive} disabled={item.disabled}>
+            {Icon ? <Icon /> : <CollapsedIconFallback title={label} />}
+            <span>{label}</span>
           </SidebarMenuButton>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent side="right" align="start" sideOffset={12} className="w-48">
           <DropdownMenuGroup>
-            {item.subItems.map((subItem) => {
-              const SubIcon = subItem.icon;
-
-              return (
-                <DropdownMenuItem key={subItem.id} asChild disabled={subItem.disabled}>
-                  <Link
-                    prefetch={false}
-                    href={subItem.url}
-                    target={subItem.newTab ? "_blank" : undefined}
-                    rel={subItem.newTab ? "noreferrer" : undefined}
-                    aria-current={isSubItemActive(subItem.url) ? "page" : undefined}
-                    className="flex items-center gap-2"
-                  >
-                    {SubIcon && <SubIcon />}
-                    <span>{subItem.title}</span>
-                  </Link>
-                </DropdownMenuItem>
-              );
-            })}
+            {item.subItems.map((subItem) => (
+              <NavSubDropdownLink key={subItem.id} subItem={subItem} isSubItemActive={isSubItemActive} />
+            ))}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -250,14 +302,15 @@ function NavDropdownItem({ item, isActive, isSubItemActive }: NavDropdownItemPro
 
 function NavCollapsibleItem({ item, isActive, defaultOpen, isSubItemActive }: NavCollapsibleItemProps) {
   const Icon = item.icon;
+  const label = useNavLabel(item);
 
   return (
     <Collapsible asChild defaultOpen={defaultOpen} className="group/collapsible">
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton tooltip={item.title} isActive={isActive} disabled={item.disabled}>
+          <SidebarMenuButton tooltip={label} isActive={isActive} disabled={item.disabled}>
             {Icon && <Icon />}
-            <span>{item.title}</span>
+            <span>{label}</span>
             <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>
         </CollapsibleTrigger>
@@ -265,29 +318,9 @@ function NavCollapsibleItem({ item, isActive, defaultOpen, isSubItemActive }: Na
 
         <CollapsibleContent>
           <SidebarMenuSub>
-            {item.subItems.map((subItem) => {
-              const SubIcon = subItem.icon;
-
-              return (
-                <SidebarMenuSubItem key={subItem.id}>
-                  <SidebarMenuSubButton
-                    asChild
-                    aria-disabled={subItem.disabled}
-                    isActive={isSubItemActive(subItem.url)}
-                  >
-                    <Link
-                      prefetch={false}
-                      href={subItem.url}
-                      target={subItem.newTab ? "_blank" : undefined}
-                      rel={subItem.newTab ? "noreferrer" : undefined}
-                    >
-                      {SubIcon && <SubIcon />}
-                      <span>{subItem.title}</span>
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              );
-            })}
+            {item.subItems.map((subItem) => (
+              <NavSubMenuLink key={subItem.id} subItem={subItem} isSubItemActive={isSubItemActive} />
+            ))}
           </SidebarMenuSub>
         </CollapsibleContent>
       </SidebarMenuItem>

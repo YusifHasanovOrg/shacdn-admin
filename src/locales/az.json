@@ -1,0 +1,197 @@
+{
+  "common": {
+    "save": "Yadda saxla",
+    "cancel": "Ləğv et",
+    "delete": "Sil",
+    "edit": "Redaktə et",
+    "back": "Geri",
+    "actions": "Əməliyyatlar",
+    "confirm": "Təsdiq et",
+    "clear": "Təmizlə",
+    "all": "Hamısı",
+    "results": "{{count}} nəticə"
+  },
+  "locale": {
+    "label": "Dil",
+    "en": "English",
+    "az": "Azərbaycan"
+  },
+  "nav": {
+    "example": "Nümunə",
+    "products": "Məhsullar",
+    "audit": "Audit"
+  },
+  "example": {
+    "products": {
+      "title": "Məhsullar",
+      "description": "Kataloq, qiymət və mövcudluğu idarə edin",
+      "add": "Məhsul əlavə et",
+      "back": "Məhsullar",
+      "emptyTitle": "Hələ məhsul yoxdur",
+      "emptyDescriptionWrite": "Başlamaq üçün ilk məhsulunuzu yaradın.",
+      "emptyDescriptionRead": "Filterlərinizə uyğun məhsul tapılmadı.",
+      "deleteTitle": "Məhsul silinsin?",
+      "deleteDescription": "\"{{name}}\" soft-delete ediləcək və siyahıdan çıxarılacaq.",
+      "deleted": "{{name}} silindi",
+      "loadError": "Məhsullar yüklənmədi",
+      "deleteError": "Məhsul silinmədi",
+      "new": {
+        "title": "Yeni məhsul",
+        "description": "Nümunə kataloqa məhsul əlavə edin",
+        "cardTitle": "Məhsul məlumatları",
+        "cardDescription": "Əsas məhsul məlumatlarını doldurun",
+        "created": "Məhsul yaradıldı",
+        "createError": "Məhsul yaradılmadı"
+      },
+      "edit": {
+        "viewDescription": "Məhsula baxış",
+        "editDescription": "Məhsulu redaktə et",
+        "cardTitle": "Məhsul məlumatları",
+        "cardDescriptionReadOnly": "Yalnız oxuma (redaktə üçün products:write lazımdır)",
+        "cardDescriptionWrite": "Məhsul məlumatlarını yeniləyin",
+        "updated": "Məhsul yeniləndi",
+        "updateError": "Məhsul yenilənmədi",
+        "deleted": "Məhsul silindi",
+        "deleteError": "Məhsul silinmədi",
+        "loadError": "Məhsul yüklənmədi",
+        "deleteTitle": "Məhsul silinsin?",
+        "deleteDescription": "\"{{name}}\" soft-delete ediləcək."
+      },
+      "columns": {
+        "name": "Ad",
+        "searchName": "Ada görə axtar...",
+        "sku": "SKU",
+        "searchSku": "SKU axtar...",
+        "category": "Kateqoriya",
+        "allCategories": "Bütün kateqoriyalar",
+        "status": "Status",
+        "price": "Qiymət",
+        "created": "Yaradılıb",
+        "openActions": "{{name}} üçün əməliyyatlar"
+      },
+      "form": {
+        "name": "Ad",
+        "namePlaceholder": "Məhsul adı",
+        "sku": "SKU",
+        "skuPlaceholder": "SKU-1001",
+        "skuHint": "Unikal kataloq kodu. Hərflər, rəqəmlər və tire istifadə edin.",
+        "category": "Kateqoriya",
+        "selectCategory": "Kateqoriya seçin",
+        "status": "Status",
+        "selectStatus": "Status seçin",
+        "price": "Qiymət",
+        "pricePlaceholder": "0.00",
+        "description": "Təsvir",
+        "descriptionPlaceholder": "İstəyə bağlı məhsul təsviri",
+        "detailsTitle": "Məhsul məlumatları",
+        "detailsDescription": "Ad, SKU, kateqoriya, status və qiymət",
+        "descriptionTitle": "Təsvir",
+        "descriptionCardDescription": "Məhsulla göstərilən əlavə qeydlər"
+      }
+    }
+  },
+  "product": {
+    "category": {
+      "ELECTRONICS": "Elektronika",
+      "CLOTHING": "Geyim",
+      "FOOD": "Qida",
+      "HOME": "Ev"
+    },
+    "status": {
+      "ACTIVE": "Aktiv",
+      "DRAFT": "Qaralama",
+      "ARCHIVED": "Arxiv"
+    }
+  },
+  "roles": {
+    "title": "Rollar və icazələr",
+    "description": "Xüsusi rollar yaradın və icazələr təyin edin",
+    "descriptionRead": "Giriş rollarına və təyin olunmuş icazələrə baxın",
+    "add": "Rol yarat",
+    "back": "Rollar",
+    "system": "Sistem",
+    "loading": "Rollar və icazələr yüklənir…",
+    "empty": "Heç bir rol konfiqurasiya olunmayıb",
+    "emptyDescriptionWrite": "Başlamaq üçün xüsusi rol yaradın.",
+    "emptyDescriptionRead": "Hələ heç bir rol mövcud deyil.",
+    "loadError": "Rollar yüklənmədi",
+    "deleted": "{{name}} silindi",
+    "deleteError": "Rol silinmədi",
+    "deleteTitle": "Rol silinsin?",
+    "deleteDescription": "\"{{name}}\" həmişəlik silinəcək. İstifadəçilər əvvəlcə başqa rola təyin olunmalıdır.",
+    "columns": {
+      "name": "Ad",
+      "code": "Kod",
+      "permissions": "İcazələr",
+      "morePermissions": "+{{count}} daha",
+      "openActions": "{{name}} üçün əməliyyatlar"
+    },
+    "form": {
+      "detailsTitle": "Rol məlumatları",
+      "detailsDescription": "Rolu sabit kod və göstərilən ad ilə təyin edin",
+      "code": "Kod",
+      "codePlaceholder": "support_agent",
+      "codeHint": "Yalnız kiçik hərflər, rəqəmlər və alt xətt. Sonradan dəyişdirilə bilməz.",
+      "codeLocked": "Rol kodu daimidir və dəyişdirilə bilməz.",
+      "name": "Ad",
+      "namePlaceholder": "Dəstək mütəxəssisi",
+      "permissionsTitle": "İcazələr",
+      "permissionsSelected": "{{total}} icazədən {{selected}} seçilib",
+      "permissionsEmpty": "Heç bir icazə mövcud deyil.",
+      "permissionsLoadError": "İcazələr yüklənmədi",
+      "selectAll": "Hamısını seç",
+      "clear": "Təmizlə",
+      "groupCount": "{{selected}} / {{total}}"
+    },
+    "groups": {
+      "dashboard": "İdarə paneli",
+      "products": "Məhsullar",
+      "users": "İstifadəçilər",
+      "roles": "Rollar",
+      "audit": "Audit"
+    },
+    "new": {
+      "title": "Yeni rol",
+      "description": "Xüsusi rol yaradın və icazələr təyin edin",
+      "created": "Rol yaradıldı",
+      "createError": "Rol yaradılmadı"
+    },
+    "edit": {
+      "viewDescription": "Rola baxış",
+      "editDescription": "Rolu redaktə et",
+      "updated": "Rol yeniləndi",
+      "updateError": "Rol yenilənmədi",
+      "deleted": "Rol silindi",
+      "deleteError": "Rol silinmədi",
+      "loadError": "Rol yüklənmədi",
+      "deleteTitle": "Rol silinsin?",
+      "deleteDescription": "\"{{name}}\" həmişəlik silinəcək. İstifadəçilər əvvəlcə başqa rola təyin olunmalıdır."
+    }
+  },
+  "audit": {
+    "title": "Audit jurnali",
+    "description": "Kimlərin qeydləri yaratdığını, yenilədiyini və ya sildiyini yoxlayın",
+    "empty": "Hələ audit hadisəsi yoxdur",
+    "emptyDescription": "Məhsul və istifadəçi dəyişiklikləri burada görünəcək.",
+    "loadError": "Audit jurnalları yüklənmədi",
+    "system": "Sistem",
+    "columns": {
+      "time": "Vaxt",
+      "actor": "İcraçı",
+      "searchActor": "İcraçı axtar...",
+      "action": "Əməliyyat",
+      "resource": "Resurs",
+      "details": "Detallar"
+    },
+    "actions": {
+      "create": "Yaradılıb",
+      "update": "Yenilənib",
+      "delete": "Silinib"
+    },
+    "resources": {
+      "product": "Məhsul",
+      "user": "İstifadəçi",
+      "role": "Rol"
+    }
+  }
+}

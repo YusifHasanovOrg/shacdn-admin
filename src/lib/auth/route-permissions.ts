@@ -25,8 +25,21 @@ export const ROUTE_PERMISSION_RULES: RoutePermissionRule[] = [
     read: PERMISSIONS.usersRead,
   },
   {
+    pattern: /^\/dashboard\/roles\/new$/,
+    write: PERMISSIONS.rolesWrite,
+  },
+  {
+    pattern: /^\/dashboard\/roles\/[^/]+\/edit$/,
+    read: PERMISSIONS.rolesRead,
+    write: PERMISSIONS.rolesWrite,
+  },
+  {
     pattern: /^\/dashboard\/roles$/,
     read: PERMISSIONS.rolesRead,
+  },
+  {
+    pattern: /^\/dashboard\/audit$/,
+    read: PERMISSIONS.auditRead,
   },
   {
     pattern: /^\/dashboard(?:\/|$)/,

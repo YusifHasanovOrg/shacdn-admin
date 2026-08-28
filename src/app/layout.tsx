@@ -10,6 +10,7 @@ import { fontVars } from "@/lib/fonts/registry";
 import { PREFERENCE_DEFAULTS } from "@/lib/preferences/preferences-config";
 import { ThemeBootScript } from "@/scripts/theme-boot";
 import { PreferencesStoreProvider } from "@/stores/preferences/preferences-provider";
+import { LocaleProvider } from "@/stores/locale/locale-provider";
 import { AuthStoreProvider } from "@/stores/auth/auth-provider";
 
 import "./globals.css";
@@ -40,12 +41,14 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       </head>
       <body className={`${fontVars} min-h-screen antialiased`}>
         <TooltipProvider>
-          <AuthStoreProvider>
-            <PreferencesStoreProvider initialValues={PREFERENCE_DEFAULTS}>
-              {children}
-              <Toaster />
-            </PreferencesStoreProvider>
-          </AuthStoreProvider>
+          <LocaleProvider>
+            <AuthStoreProvider>
+              <PreferencesStoreProvider initialValues={PREFERENCE_DEFAULTS}>
+                {children}
+                <Toaster />
+              </PreferencesStoreProvider>
+            </AuthStoreProvider>
+          </LocaleProvider>
         </TooltipProvider>
         {/* Used for this project's hosted demo. Feel free to remove it; it is not required for template functionality. */}
         <Analytics />

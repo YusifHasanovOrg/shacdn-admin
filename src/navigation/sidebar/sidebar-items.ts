@@ -18,6 +18,7 @@ import {
   MessageSquare,
   Package,
   ReceiptText,
+  ScrollText,
   Server,
   ShoppingBag,
   SquareArrowUpRight,
@@ -32,6 +33,7 @@ export type NavBadge = "new" | "soon";
 export interface NavSubItem {
   id: string;
   title: string;
+  titleKey?: string;
   url: string;
   icon?: LucideIcon;
   badge?: NavBadge;
@@ -43,6 +45,7 @@ export interface NavSubItem {
 interface NavItemBase {
   id: string;
   title: string;
+  titleKey?: string;
   icon?: LucideIcon;
   badge?: NavBadge;
   disabled?: boolean;
@@ -64,6 +67,7 @@ export type NavMainItem = NavMainLinkItem | NavMainParentItem;
 export interface NavGroup {
   id: number;
   label?: string;
+  labelKey?: string;
   items: NavMainItem[];
   permissions?: string[];
 }
@@ -208,6 +212,14 @@ export const sidebarItems: NavGroup[] = [
         permissions: [PERMISSIONS.rolesRead],
       },
       {
+        id: "audit",
+        title: "Audit",
+        titleKey: "nav.audit",
+        url: "/dashboard/audit",
+        icon: ScrollText,
+        permissions: [PERMISSIONS.auditRead],
+      },
+      {
         id: "authentication",
         title: "Authentication",
         icon: Fingerprint,
@@ -239,12 +251,22 @@ export const sidebarItems: NavGroup[] = [
   {
     id: 4,
     label: "Example",
+    labelKey: "nav.example",
     items: [
       {
         id: "example",
         title: "Example",
+        titleKey: "nav.example",
         icon: Package,
-        subItems: [{ id: "example-products", title: "Products", url: "/dashboard/example/products", permissions: [PERMISSIONS.productsRead] }],
+        subItems: [
+          {
+            id: "example-products",
+            title: "Products",
+            titleKey: "nav.products",
+            url: "/dashboard/example/products",
+            permissions: [PERMISSIONS.productsRead],
+          },
+        ],
       },
     ],
   },
