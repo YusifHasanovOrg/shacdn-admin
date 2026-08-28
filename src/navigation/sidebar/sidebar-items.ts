@@ -16,6 +16,7 @@ import {
   type LucideIcon,
   Mail,
   MessageSquare,
+  Package,
   ReceiptText,
   Server,
   ShoppingBag,
@@ -23,6 +24,8 @@ import {
   UserRound,
   Users,
 } from "lucide-react";
+
+import { PERMISSIONS } from "@/lib/auth/constants";
 
 export type NavBadge = "new" | "soon";
 
@@ -34,6 +37,7 @@ export interface NavSubItem {
   badge?: NavBadge;
   disabled?: boolean;
   newTab?: boolean;
+  permissions?: string[];
 }
 
 interface NavItemBase {
@@ -43,6 +47,7 @@ interface NavItemBase {
   badge?: NavBadge;
   disabled?: boolean;
   newTab?: boolean;
+  permissions?: string[];
 }
 
 export interface NavMainLinkItem extends NavItemBase {
@@ -60,7 +65,10 @@ export interface NavGroup {
   id: number;
   label?: string;
   items: NavMainItem[];
+  permissions?: string[];
 }
+
+const dashboardPermission = [PERMISSIONS.dashboardRead];
 
 export const sidebarItems: NavGroup[] = [
   {
@@ -72,6 +80,7 @@ export const sidebarItems: NavGroup[] = [
         title: "Default",
         url: "/dashboard/default",
         icon: LayoutDashboard,
+        permissions: dashboardPermission,
       },
       {
         id: "crm",
@@ -189,12 +198,14 @@ export const sidebarItems: NavGroup[] = [
         title: "Users",
         url: "/dashboard/users",
         icon: Users,
+        permissions: [PERMISSIONS.usersRead],
       },
       {
         id: "roles",
         title: "Roles",
         url: "/dashboard/roles",
         icon: Lock,
+        permissions: [PERMISSIONS.rolesRead],
       },
       {
         id: "authentication",
@@ -227,6 +238,18 @@ export const sidebarItems: NavGroup[] = [
   },
   {
     id: 4,
+    label: "Example",
+    items: [
+      {
+        id: "example",
+        title: "Example",
+        icon: Package,
+        subItems: [{ id: "example-products", title: "Products", url: "/dashboard/example/products", permissions: [PERMISSIONS.productsRead] }],
+      },
+    ],
+  },
+  {
+    id: 5,
     label: "Misc",
     items: [
       {
